@@ -1,0 +1,23 @@
+{
+  "name": "editor",
+  "version": "0.01",
+  "description": "editor with tab",
+  "main": "index.js",
+  "author": "zhangbo",
+  "license": "MIT",
+  "dependencies": {
+    "draft-js": "^0.10.1",
+    "react": "^15.6.1"
+  },
+  "devDependencies": {
+    "@storybook/addon-actions": "^3.2.6",
+    "@storybook/addon-links": "^3.2.6",
+    "@storybook/react": "^3.2.8"
+  },
+  "scripts": {
+    "start": "start-storybook -p 6006"
+  },
+  "devEngines": {
+    "node": ">= 6.x"
+  }
+}
