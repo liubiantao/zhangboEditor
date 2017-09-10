@@ -77,8 +77,7 @@ class MyEditor extends React.Component {
   }
 
   _onTab(e) {
-    // 最高四层, 所以这里 maxDepth= 3 不用改
-    const maxDepth = 3
+    const maxDepth = 4
     this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth))
   }
 
