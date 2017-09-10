@@ -15,7 +15,8 @@
     "@storybook/react": "^3.2.8"
   },
   "scripts": {
-    "start": "start-storybook -p 6006"
+    "start": "start-storybook -p 6006",
+    "build": "$(npm bin)/build-storybook -s src -c .storybook -o dist"
   },
   "devEngines": {
     "node": ">= 6.x"
