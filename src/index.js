@@ -1,5 +1,5 @@
 import React from 'react'
-import { Editor, EditorState, RichUtils } from 'draft-js'
+import { Editor, EditorState, RichUtils, convertToRaw } from 'draft-js'
 import './editor.css'
 
 class StyleButton extends React.Component {
@@ -58,8 +58,8 @@ class MyEditor extends React.Component {
     this.onChange = editorState => this.setState({ editorState })
     this.focus = () => this.refs.editor.focus()
     this.onTab = e => this._onTab(e)
-    this.handleKeyCommand = command => this._handleKeyCommand(command, this.state.editorState)
     this.toggleBlockType = type => this._toggleBlockType(type)
+    this.getContent = () => this._getContent(this.state.editorState.getCurrentContent())
   }
 
   componentDidMount() {
@@ -86,19 +86,25 @@ class MyEditor extends React.Component {
   _toggleBlockType(blockType) {
     this.onChange(RichUtils.toggleBlockType(this.state.editorState, blockType))
   }
-
+  _getContent(content) {
+    const rawDraftContentState = JSON.stringify(convertToRaw(content))
+    this.props.getRawData(rawDraftContentState)
+  }
   render() {
     const { editorState } = this.state
 
     let className = 'RichEditor-editor'
 
     return (
-      <div className="RichEditor-root">
-        {/* 如果不需要切换状态, 可以删掉这个, componentDidMount 里设置初始状态就行 */}
-        <BlockStyleControls editorState={editorState} onToggle={this.toggleBlockType} />
-        <div className={className} onClick={this.focus}>
-          <Editor ref="editor" onTab={this.onTab} editorState={editorState} onChange={this.onChange} />
+      <div>
+        <div className="RichEditor-root">
+          {/* 如果不需要切换状态, 可以删掉这个, componentDidMount 里设置初始状态就行 */}
+          <BlockStyleControls editorState={editorState} onToggle={this.toggleBlockType} />
+          <div className={className} onClick={this.focus}>
+            <Editor ref="editor" onTab={this.onTab} editorState={editorState} onChange={this.onChange} />
+          </div>
         </div>
+        <div onClick={this.getContent}>{this.props.submit || <button>提交</button>}</div>
       </div>
     )
   }
