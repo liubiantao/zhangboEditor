@@ -7,7 +7,8 @@
   "license": "MIT",
   "dependencies": {
     "draft-js": "^0.10.1",
-    "react": "^15.6.1"
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^3.2.6",
@@ -15,7 +16,7 @@
     "@storybook/react": "^3.2.8"
   },
   "scripts": {
-    "start": "start-storybook -p 6006",
+    "start": "$(npm bin)/start-storybook -p 6006",
     "build": "$(npm bin)/build-storybook -s src -c .storybook -o dist"
   },
   "devEngines": {
