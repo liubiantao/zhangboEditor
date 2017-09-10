@@ -1,7 +1,8 @@
 # Editor
 
-运行 demo:
+online demo: http://atmg.al/zhangboEditor/dist
 
+local demo: 
 ```
 $ yarn (npm install)
 $ yarn start (npm start)
@@ -13,7 +14,7 @@ $ yarn start (npm start)
 | 参数       | 说明                                      | 类型       | 默认值 |
 |-----------|------------------------------------------|------------|--------|
 |getRawData	| 获取编辑器 Raw data	| (content: json) => void	| - |
-| submit | 提交按钮组件 | JSX.Element | <button>提交</button> |
+| submit | 提交按钮组件 | JSX.Element | `<button>提交</button>` |
 
 ## DEMO
 
