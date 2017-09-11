@@ -1,5 +1,5 @@
 import React from 'react'
-import { Editor, EditorState, RichUtils, convertToRaw } from 'draft-js'
+import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js'
 import './editor.css'
 
 class StyleButton extends React.Component {
@@ -54,8 +54,16 @@ const BlockStyleControls = props => {
 class MyEditor extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { editorState: EditorState.createEmpty() }
-    this.onChange = editorState => this.setState({ editorState })
+    this.state = {}
+
+    const content = window.localStorage.getItem('content')
+
+    if (content) {
+      this.state.editorState = EditorState.createWithContent(convertFromRaw(JSON.parse(content)))
+    } else {
+      this.state.editorState = EditorState.createEmpty()
+    }
+    this.onChange = e => this._onChange(e)
     this.focus = () => this.refs.editor.focus()
     this.onTab = e => this._onTab(e)
     this.toggleBlockType = type => this._toggleBlockType(type)
@@ -63,7 +71,20 @@ class MyEditor extends React.Component {
   }
 
   componentDidMount() {
-    this.onChange(RichUtils.toggleBlockType(this.state.editorState, 'unordered-list-item'))
+    const content = window.localStorage.getItem('content')
+    if (!content) {
+      this.onChange(RichUtils.toggleBlockType(this.state.editorState, 'unordered-list-item'))
+    }
+  }
+
+  _onChange(editorState) {
+    const contentState = editorState.getCurrentContent()
+    this.saveContent(contentState)
+    this.setState({ editorState })
+  }
+
+  saveContent = content => {
+    window.localStorage.setItem('content', JSON.stringify(convertToRaw(content)))
   }
 
   _handleKeyCommand(command, editorState) {
