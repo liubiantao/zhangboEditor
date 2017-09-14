@@ -108,6 +108,9 @@ class MyEditor extends React.Component {
     const rawDraftContentState = JSON.stringify(convertToRaw(content))
     this.saveContent(rawDraftContentState)
     this.props.getRawData(rawDraftContentState)
+
+    const titleList = content.getBlockMap().filter(x => x.depth === 0 && x.text)
+    titleList.size === 0 && alert('请至少输入一个一级标题')
   }
 
   render() {
