@@ -78,13 +78,11 @@ class MyEditor extends React.Component {
   }
 
   _onChange(editorState) {
-    const contentState = editorState.getCurrentContent()
-    this.saveContent(contentState)
     this.setState({ editorState })
   }
 
   saveContent = content => {
-    window.localStorage.setItem('content', JSON.stringify(convertToRaw(content)))
+    window.localStorage.setItem('content', content)
   }
 
   _handleKeyCommand(command, editorState) {
@@ -108,6 +106,7 @@ class MyEditor extends React.Component {
 
   _getContent(content) {
     const rawDraftContentState = JSON.stringify(convertToRaw(content))
+    this.saveContent(rawDraftContentState)
     this.props.getRawData(rawDraftContentState)
   }
 
