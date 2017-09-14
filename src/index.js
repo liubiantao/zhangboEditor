@@ -8,13 +8,8 @@ class MyEditor extends React.Component {
     super(props)
     this.state = {}
 
-    const content = window.localStorage.getItem('content')
+    this.initEditorState()
 
-    if (content) {
-      this.state.editorState = EditorState.createWithContent(convertFromRaw(JSON.parse(content)))
-    } else {
-      this.state.editorState = EditorState.createEmpty()
-    }
     this.onChange = e => this._onChange(e)
     this.focus = () => this.refs.editor.focus()
     this.onTab = e => this._onTab(e)
@@ -29,22 +24,22 @@ class MyEditor extends React.Component {
     }
   }
 
+  initEditorState() {
+    const content = window.localStorage.getItem('content')
+
+    if (content) {
+      this.state.editorState = EditorState.createWithContent(convertFromRaw(JSON.parse(content)))
+    } else {
+      this.state.editorState = EditorState.createEmpty()
+    }
+  }
+
   _onChange(editorState) {
     this.setState({ editorState })
   }
 
   saveContent = content => {
     window.localStorage.setItem('content', content)
-  }
-
-  _handleKeyCommand(command, editorState) {
-    console.warn('key', command)
-    const newState = RichUtils.handleKeyCommand(editorState, command)
-    if (newState) {
-      this.onChange(newState)
-      return true
-    }
-    return false
   }
 
   _onTab(e) {
