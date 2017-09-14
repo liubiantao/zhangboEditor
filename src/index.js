@@ -1,27 +1,27 @@
 import React from 'react'
 import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js'
 import { StyleButton, BlockStyleControls } from './StyleButton'
+import placeholder from './placeholder.json'
 import './editor.css'
 
 class MyEditor extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      showPlaceHolder: false,
+    }
 
     this.initEditorState()
 
     this.onChange = e => this._onChange(e)
-    this.focus = () => this.refs.editor.focus()
+
     this.onTab = e => this._onTab(e)
     this.toggleBlockType = type => this._toggleBlockType(type)
     this.getContent = () => this._getContent(this.state.editorState.getCurrentContent())
   }
 
   componentDidMount() {
-    const content = window.localStorage.getItem('content')
-    if (!content) {
-      this.onChange(RichUtils.toggleBlockType(this.state.editorState, 'unordered-list-item'))
-    }
+    this.showPlaceHolder()
   }
 
   initEditorState() {
@@ -32,6 +32,21 @@ class MyEditor extends React.Component {
     } else {
       this.state.editorState = EditorState.createEmpty()
     }
+  }
+
+  focus = () => {
+    this.state.showPlaceHolder &&
+      this.setState(
+        {
+          editorState: EditorState.createEmpty(),
+          showPlaceHolder: false,
+        },
+        () => {
+          this.onChange(RichUtils.toggleBlockType(this.state.editorState, 'unordered-list-item'))
+        },
+      )
+
+    this.refs.editor.focus()
   }
 
   _onChange(editorState) {
@@ -56,14 +71,29 @@ class MyEditor extends React.Component {
     this.saveContent(rawDraftContentState)
     this.props.getRawData(rawDraftContentState)
 
-    const titleList = content.getBlockMap().filter(x => x.depth === 0 && x.text)
-    titleList.size === 0 && alert('请至少输入一个一级标题')
+    const primaryTitleList = content.getBlockMap().filter(x => x.depth === 0 && x.text)
+    primaryTitleList.size === 0 && alert('请至少输入一个一级标题')
+  }
+
+  blur = () => {
+    const hasText = this.state.editorState.getCurrentContent().hasText()
+    hasText || this.showPlaceHolder()
+  }
+
+  showPlaceHolder = () => {
+    const hasText = this.state.editorState.getCurrentContent().hasText()
+    const editorState = EditorState.createWithContent(convertFromRaw(placeholder))
+
+    hasText || this.setState({ editorState, showPlaceHolder: true })
   }
 
   render() {
-    const { editorState } = this.state
+    const { editorState, showPlaceHolder } = this.state
 
     let className = 'RichEditor-editor'
+    if (showPlaceHolder) {
+      className += ' RichEditor-Placeholder'
+    }
 
     return (
       <div>
