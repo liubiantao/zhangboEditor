@@ -72,7 +72,9 @@ class MyEditor extends React.Component {
     this.props.getRawData(rawDraftContentState)
 
     const primaryTitleList = content.getBlockMap().filter(x => x.depth === 0 && x.text)
-    primaryTitleList.size === 0 && alert('请至少输入一个一级标题')
+    if (!primaryTitleList.size || this.state.showPlaceHolder) {
+      alert('请至少输入一个一级标题')
+    } 
   }
 
   blur = () => {
